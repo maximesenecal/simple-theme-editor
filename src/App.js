@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+
+import Accordion from './Accordion/Accordion';
+import Button from './Button/Button';
+import DesignProperty from './DesignProperty/DesignProperty';
 
 function App() {
+  const [primaryFont, setPrimaryFont] = useState('#eee');
+  const [primaryBackground, setPrimaryBackground] = useState('#eee');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1 style={{ color: '#4CB1F8' }}>Simple Theme Editor</h1>
       </header>
+      <Accordion>
+        <DesignProperty
+          property="primary-font-color"
+          value={primaryFont}
+          label="Primary font color :"
+          onChange={(e) => setPrimaryFont(e.target.value)}
+          inputType='color'
+        />
+        <DesignProperty property="primary-background-color" value={primaryBackground} label="Primary background color :" onChange={(e) => setPrimaryBackground(e.target.value)} />
+      </Accordion>
+      <Button onClick={() => console.log('theme saved')}>Save</Button>
     </div>
   );
 }

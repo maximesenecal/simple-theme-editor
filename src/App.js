@@ -1,30 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
+
+import * as defaultTheme from './themes/default';
 
 import Accordion from './Accordion/Accordion';
 import Button from './Button/Button';
 import DesignProperty from './DesignProperty/DesignProperty';
 
+/**
+ * Get theme in localStorage
+ */
+function getLocalStorageTheme() {
+  try {
+    const theme = localStorage.getItem('simpleEditorTheme');
+    return JSON.parse(theme);
+  } catch (err) {
+    console.error('Could not loading theme in local storage, loading default instead.', err);
+  }
+}
+
+/**
+ * Set editor theme in local storage
+ * @param {Object} themeObject New editor theme
+ */
+function setThemeInLocalStorage(themeObject) {
+  localStorage.setItem('simpleEditorTheme', JSON.stringify(themeObject));
+}
+
 function App() {
-  const [primaryFont, setPrimaryFont] = useState('#eee');
-  const [primaryBackground, setPrimaryBackground] = useState('#eee');
+  const [theme, setTheme] = useState(defaultTheme);
+  const [primaryFontColor, setPrimaryFontColor] = useState(['#4CB1F8', 'color']);
+
+  useEffect(() => {
+    const localTheme = getLocalStorageTheme();
+    if (localTheme) {
+      setTheme(localTheme)
+    }
+  }, []);
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <header>
         <h1 style={{ color: '#4CB1F8' }}>Simple Theme Editor</h1>
       </header>
       <Accordion>
         <DesignProperty
           property="primary-font-color"
-          value={primaryFont}
+          value={primaryFontColor[0]}
+          type={primaryFontColor[1]}
           label="Primary font color :"
-          onChange={(e) => setPrimaryFont(e.target.value)}
-          inputType='color'
+          onSave={(value, type) => setPrimaryFontColor([value, type])}
         />
-        <DesignProperty property="primary-background-color" value={primaryBackground} label="Primary background color :" onChange={(e) => setPrimaryBackground(e.target.value)} />
       </Accordion>
-      <Button onClick={() => console.log('theme saved')}>Save</Button>
-    </div>
+      <Button onClick={() => setTheme()}>Save</Button>
+    </ThemeProvider>
   );
 }
 

@@ -23,13 +23,8 @@ const PreviewPanel = styled.div`
   }
 `;
 
-function DesignProperty({ property, value, type, label, onSave }) {
+function DesignProperty({ property, value, type, label }) {
   const [editable, setEditable] = useState(false);
-
-  function handleSave(updateValue, updateType) {
-    onSave(property, updateValue, updateType);
-    setEditable(false);
-  }
 
   return (
     <Container>
@@ -39,7 +34,6 @@ function DesignProperty({ property, value, type, label, onSave }) {
           currentValue={value}
           currentType={type}
           onClose={() => setEditable(false)}
-          onSave={handleSave}
         />
       ) : (
           <PreviewPanel onClick={() => setEditable(true)}>
@@ -53,7 +47,6 @@ function DesignProperty({ property, value, type, label, onSave }) {
 }
 
 DesignProperty.propTypes = {
-  onSave: PropTypes.func,
   property: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   type: PropTypes.oneOf(["color", "text", "em", "rem", "px"]),

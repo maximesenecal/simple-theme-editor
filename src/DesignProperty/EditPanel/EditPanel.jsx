@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import styled from "styled-components";
 import PropTypes from "prop-types";
+import AppContext from "../../context/AppContext";
 
 const types = ['text', 'em', 'rem', 'color'];
 
@@ -20,31 +21,15 @@ const EditorContainer = styled.div`
   flex-direction: column;
 `;
 
-function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
+function EditPanel({ property, currentValue, currentType, onClose }) {
   const [type, setType] = useState(currentType);
   const [value, setValue] = useState(currentValue);
-  const themeContext = useContext(ThemeContext);
-
-  function getReferencesValues(value) {
-    function replaceValueRef(valueRef) {
-      // Extract component ref
-      const component = valueRef.substring(
-        valueRef.lastIndexOf("{") + 1,
-        valueRef.lastIndexOf(".")
-      );
-      // Extract key ref
-      const key = valueRef.substring(
-        valueRef.lastIndexOf(".") + 1,
-        valueRef.lastIndexOf("}")
-      );
-      if (themeContext[component][key]) {
-        return themeContext[component][key][0];
-      }
-    }
-
-    let regex = /{.*?}/g; // Regex to match property between {}
-    const result = value.replace(regex, replaceValueRef);
-    return result; // Return string with replace values
+  const context = useContext(AppContext);
+  
+  function handleClick() {
+    const { updateTheme } = context;
+    updateTheme(property, [value, type]);
+    onClose();
   }
 
   return (
@@ -64,7 +49,6 @@ function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
-          {getReferencesValues(value)}
         </div>
         <div role="radiogroup">
           <span>Type:</span>
@@ -83,7 +67,7 @@ function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
         </div>
       </EditorContainer>
       <br />
-      <button onClick={() => onSave(value, type)}>OK</button>
+      <button onClick={() => handleClick()}>OK</button>
     </Container>
   );
 }
@@ -92,7 +76,6 @@ EditPanel.propTypes = {
   property: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
   currentType: PropTypes.oneOf(["text", "em", "px", "color"]).isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 EditPanel.defaultProps = {};

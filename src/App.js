@@ -32,39 +32,34 @@ function App() {
   const [theme, setTheme] = useState(defaultTheme);
 
   /**
-   * Get theme value with reference
-   * @param {String} ref Reference value
+   * Check references in value
+   * @param {String} value User value
    */
-  function getValueFromRef(ref) {
-    function replaceWithValue(value) {
+  function replaceRefValues(value) {
+    function replaceRef(ref) {
       // Extract component ref
-      const component = value.substring(
-        value.lastIndexOf("{") + 1,
-        value.lastIndexOf(".")
+      const component = ref.substring(
+        ref.lastIndexOf("{") + 1,
+        ref.lastIndexOf(".")
       );
       // Extract key ref
-      const key = value.substring(
-        value.lastIndexOf(".") + 1,
-        value.lastIndexOf("}")
+      const key = ref.substring(
+        ref.lastIndexOf(".") + 1,
+        ref.lastIndexOf("}")
       );
       if (theme[component][key]) { // Get value if exists
         return theme[component][key][0];
       }
     }
-
     let regex = /{.*?}/g; // Regex to match property between {}
-    const result = ref.replace(regex, replaceWithValue);
+    const result = value.replace(regex, replaceRef);
     return result;
   }
 
-  function updateTheme() {
-    console.log('update theme');
+  function updateTheme(reference, value) {
     // setTheme({
     //   ...theme,
-    //   [component]: {
-    //     ...theme[component],
-    //     [item]: update,
-    //   },
+    //   [reference]: value,
     // });
   }
 
@@ -78,11 +73,11 @@ function App() {
           <Accordion key={component} title={component}>
             {Object.entries(theme[component]).map(([item, value]) => (
               <DesignProperty
-                key={item}
-                property={item}
+                key={`${component}.${item}`}
+                reference={`${component}.${item}`}
                 value={value[0]}
                 type={value[1]}
-                label={item}
+                label={`${component}.${item}`}
               />
             ))}
           </Accordion>

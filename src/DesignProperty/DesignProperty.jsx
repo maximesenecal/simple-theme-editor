@@ -23,14 +23,14 @@ const PreviewPanel = styled.div`
   }
 `;
 
-function DesignProperty({ property, value, type, label }) {
+function DesignProperty({ reference, value, type, label }) {
   const [editable, setEditable] = useState(false);
 
   return (
     <Container>
       { editable ? (
         <EditPanel
-          property={property}
+          reference={reference}
           currentValue={value}
           currentType={type}
           onClose={() => setEditable(false)}
@@ -39,7 +39,7 @@ function DesignProperty({ property, value, type, label }) {
           <PreviewPanel onClick={() => setEditable(true)}>
             <p>{label}</p>
             <p>{value}</p>
-            <i>{property}</i>
+            <i>{reference}</i>
           </PreviewPanel>
         )}
     </Container>
@@ -47,7 +47,7 @@ function DesignProperty({ property, value, type, label }) {
 }
 
 DesignProperty.propTypes = {
-  property: PropTypes.string,
+  reference: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   type: PropTypes.oneOf(["color", "text", "em", "rem", "px"]),
   label: PropTypes.string,

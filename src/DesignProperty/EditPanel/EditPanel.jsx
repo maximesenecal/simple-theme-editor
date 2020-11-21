@@ -21,31 +21,31 @@ const EditorContainer = styled.div`
   flex-direction: column;
 `;
 
-function EditPanel({ property, currentValue, currentType, onClose }) {
+function EditPanel({ reference, currentValue, currentType, onClose }) {
   const [type, setType] = useState(currentType);
   const [value, setValue] = useState(currentValue);
   const context = useContext(AppContext);
   
   function handleClick() {
     const { updateTheme } = context;
-    updateTheme(property, [value, type]);
+    updateTheme(reference, [value, type]);
     onClose();
   }
 
   return (
     <Container>
       <EditorHeader>
-        <div>{property}</div>
+        <div>{reference}</div>
         <button onClick={() => onClose()}>Close</button>
       </EditorHeader>
       <br />
       <EditorContainer>
         <div>
-          <label htmlFor={property}>Value :</label>
+          <label htmlFor={reference}>Value :</label>
           <input
             type={type === "color" ? "color" : "text"}
-            id={property}
-            name={property}
+            id={reference}
+            name={reference}
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
@@ -56,12 +56,12 @@ function EditPanel({ property, currentValue, currentType, onClose }) {
           <div key={item}>
             <input
               type="radio"
-              id={`${property}-${item}`}
-              name={`${property}-select-type`}
+              id={reference}
+              name={`${reference}-select-type`}
               value={item}
               onChange={(e) => setType(item)}
             />
-            <label htmlFor={`${property}-${item}`}>{item}</label>
+            <label htmlFor={reference}>{item}</label>
           </div>
         ))}
         </div>
@@ -73,7 +73,7 @@ function EditPanel({ property, currentValue, currentType, onClose }) {
 }
 
 EditPanel.propTypes = {
-  property: PropTypes.string.isRequired,
+  reference: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
   currentType: PropTypes.oneOf(["text", "em", "px", "color"]).isRequired,
 };

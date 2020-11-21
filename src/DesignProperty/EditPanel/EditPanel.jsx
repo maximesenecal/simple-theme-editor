@@ -2,8 +2,11 @@ import { useState, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import PropTypes from "prop-types";
 
+const types = ['text', 'em', 'rem', 'color'];
+
 const Container = styled.div`
-  background-color: #ebebeb;
+  background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
+  width: 100%;
   padding: 1rem;
 `;
 
@@ -14,7 +17,7 @@ const EditorHeader = styled.div`
 
 const EditorContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
@@ -35,7 +38,7 @@ function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
         valueRef.lastIndexOf("}")
       );
       if (themeContext[component][key]) {
-        return themeContext[component][key];
+        return themeContext[component][key][0];
       }
     }
 
@@ -48,58 +51,38 @@ function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
     <Container>
       <EditorHeader>
         <div>{property}</div>
-        <div>{getReferencesValues(value)}</div>
         <button onClick={() => onClose()}>Close</button>
       </EditorHeader>
+      <br />
       <EditorContainer>
-        <label htmlFor={property}>Value :</label>
-        <input
-          type={type === "color" ? "color" : "text"}
-          id={property}
-          name={property}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
         <div>
-          Type :
+          <label htmlFor={property}>Value :</label>
           <input
-            type="radio"
-            id="text-type"
-            name="select-type-property"
-            value="text"
-            onChange={(e) => setType("text")}
-            checked={type === "text"}
+            type={type === "color" ? "color" : "text"}
+            id={property}
+            name={property}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
           />
-          <label htmlFor="text-type">text</label>
-          <input
-            type="radio"
-            id="em-type"
-            name="select-type-property"
-            value="em"
-            onChange={(e) => setType("em")}
-            checked={type === "em"}
-          />
-          <label htmlFor="em-type">em</label>
-          <input
-            type="radio"
-            id="px-type"
-            name="select-type-property"
-            value="px"
-            onChange={(e) => setType("px")}
-            checked={type === "px"}
-          />
-          <label htmlFor="px-type">px</label>
-          <input
-            type="radio"
-            id="color-type"
-            name="select-type-property"
-            value="color"
-            onChange={(e) => setType("color")}
-            checked={type === "color"}
-          />
-          <label htmlFor="color-type">color</label>
+          {getReferencesValues(value)}
+        </div>
+        <div role="radiogroup">
+          <span>Type:</span>
+          {types.map(item => (
+          <div key={item}>
+            <input
+              type="radio"
+              id={`${property}-${item}`}
+              name={`${property}-select-type`}
+              value={item}
+              onChange={(e) => setType(item)}
+            />
+            <label htmlFor={`${property}-${item}`}>{item}</label>
+          </div>
+        ))}
         </div>
       </EditorContainer>
+      <br />
       <button onClick={() => onSave(value, type)}>OK</button>
     </Container>
   );
@@ -107,8 +90,7 @@ function EditPanel({ property, currentValue, currentType, onClose, onSave }) {
 
 EditPanel.propTypes = {
   property: PropTypes.string.isRequired,
-  currentValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
+  currentValue: PropTypes.string.isRequired,
   currentType: PropTypes.oneOf(["text", "em", "px", "color"]).isRequired,
   onSave: PropTypes.func.isRequired,
 };

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+import Heading from "../Heading/Heading";
+
 const Container = styled.section`
-  width: 100%;
+  width: 50%;
+  margin-bottom: 1rem;
 `;
 
 const Panel = styled.div`
@@ -15,7 +18,7 @@ const HeaderButton = styled.button`
   width: 100%;
   padding: 1rem;
   text-align: left;
-  background-color: white;
+  background-color: #EAEEF1;
   cursor: pointer;
   border: 0;
 
@@ -30,7 +33,7 @@ function Accordion({ children, title }) {
   return (
     <Container>
       <HeaderButton onClick={() => setDisplayPanel(!displayPanel)}>
-        <h2>{title}</h2>
+        <Heading as="h2">{title}</Heading>
       </HeaderButton>
       <Panel displayed={displayPanel}>{children}</Panel>
     </Container>

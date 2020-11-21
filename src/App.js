@@ -4,8 +4,8 @@ import { ThemeProvider } from "styled-components";
 import * as defaultTheme from "./themes/default";
 
 import Accordion from "./Accordion/Accordion";
-import Button from "./Button/Button";
 import DesignProperty from "./DesignProperty/DesignProperty";
+import Heading from "./Heading/Heading";
 
 /**
  * Get theme in localStorage
@@ -29,50 +29,31 @@ import DesignProperty from "./DesignProperty/DesignProperty";
 
 function App() {
   const [theme, setTheme] = useState(defaultTheme);
-  const [primaryFontColor, setPrimaryFontColor] = useState([
-    "#4CB1F8",
-    "color",
-  ]);
-  const [primaryBackgroundColor, setPrimaryBackgroundColor] = useState([
-    "#000126",
-    "color",
-  ]);
-  const [borderTextField, setBorderTextField] = useState([
-    "1px solid black",
-    "text",
-  ]);
+
+  const handleSave = (property, value, type) => {
+    console.log(property, value+type);
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <header>
-        <h1 style={{ color: "#4CB1F8" }}>Simple Theme Editor</h1>
+        <Heading as="h1">Simple Theme Editor</Heading>
       </header>
-      <Accordion title="General colors">
-        <DesignProperty
-          property="colors.primary"
-          value={primaryFontColor[0]}
-          type={primaryFontColor[1]}
-          label="Primary font color :"
-          onSave={(value, type) => setPrimaryFontColor([value, type])}
-        />
-        <DesignProperty
-          property="colors.primaryBackground"
-          value={primaryBackgroundColor[0]}
-          type={primaryBackgroundColor[1]}
-          label="Primary background color :"
-          onSave={(value, type) => setPrimaryBackgroundColor([value, type])}
-        />
-      </Accordion>
-      <Accordion title="Text fields">
-        <DesignProperty
-          property="textField.border"
-          value={borderTextField[0]}
-          type={borderTextField[1]}
-          label="Primary font color :"
-          onSave={(value, type) => setBorderTextField([value, type])}
-        />
-      </Accordion>
-      <Button onClick={() => setTheme()}>Save</Button>
+      {Object.keys(theme).map((key) => (
+        <Accordion key={key} title={key}>
+          {Object.entries(theme[key]).map(([item, value]) => (
+            <DesignProperty
+              key={item}
+              property={item}
+              value={value[0]}
+              type={value[1]}
+              label={item}
+              onSave={handleSave}
+            />
+          ))}
+        </Accordion>
+      ))}
+      <button onClick={() => setTheme()}>Save</button>
     </ThemeProvider>
   );
 }

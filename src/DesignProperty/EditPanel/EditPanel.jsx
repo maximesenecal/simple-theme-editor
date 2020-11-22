@@ -6,7 +6,7 @@ import AppContext from "../../context/AppContext";
 const types = ['text', 'em', 'rem', 'color'];
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
   width: 100%;
   padding: 1rem;
 `;
@@ -21,14 +21,24 @@ const EditorContainer = styled.div`
   flex-direction: column;
 `;
 
-function EditPanel({ reference, currentValue, currentType, onClose }) {
-  const [type, setType] = useState(currentType);
+function EditPanel({ reference, currentValue, onClose }) {
+  const [type, setType] = useState('text');
   const [value, setValue] = useState(currentValue);
   const context = useContext(AppContext);
   
   function handleClick() {
     const { updateTheme } = context;
-    updateTheme(reference, [value, type]);
+    let newValue = value;
+    switch (type) {
+      case 'em':
+      case 'rem':
+      case 'px':
+        newValue += type; // Append type when necessary
+        break;
+      default:
+        break;
+    }
+    updateTheme(reference, newValue);
     onClose();
   }
 
@@ -75,7 +85,6 @@ function EditPanel({ reference, currentValue, currentType, onClose }) {
 EditPanel.propTypes = {
   reference: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
-  currentType: PropTypes.oneOf(["text", "em", "px", "color"]).isRequired,
 };
 
 EditPanel.defaultProps = {};

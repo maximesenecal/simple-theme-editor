@@ -19,11 +19,11 @@ const PreviewPanel = styled.div`
   cursor: pointer;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary[0]};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-function DesignProperty({ reference, value, type, label }) {
+function DesignProperty({ reference, value, label }) {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -32,7 +32,6 @@ function DesignProperty({ reference, value, type, label }) {
         <EditPanel
           reference={reference}
           currentValue={value}
-          currentType={type}
           onClose={() => setEditable(false)}
         />
       ) : (
@@ -48,13 +47,11 @@ function DesignProperty({ reference, value, type, label }) {
 
 DesignProperty.propTypes = {
   reference: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  type: PropTypes.oneOf(["color", "text", "em", "rem", "px"]),
+  value: PropTypes.string.isRequired,
   label: PropTypes.string,
 };
 
 DesignProperty.defaultProps = {
-  type: "text",
 };
 
 export default DesignProperty;

@@ -48,7 +48,7 @@ function App() {
         ref.lastIndexOf("}")
       );
       if (theme[component][key]) { // Get value if exists
-        return theme[component][key][0];
+        return theme[component][key];
       }
     }
     let regex = /{.*?}/g; // Regex to match property between {}
@@ -56,6 +56,7 @@ function App() {
     return result;
   }
 
+  // Should update all references when a value change
   function updateTheme(reference, value) {
     // setTheme({
     //   ...theme,
@@ -75,8 +76,7 @@ function App() {
               <DesignProperty
                 key={`${component}.${item}`}
                 reference={`${component}.${item}`}
-                value={value[0]}
-                type={value[1]}
+                value={value}
                 label={`${component}.${item}`}
               />
             ))}

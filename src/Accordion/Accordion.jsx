@@ -1,41 +1,61 @@
 import { useState } from "react";
 import styled from "styled-components";
-
-import Heading from "../Heading/Heading";
-
-const Container = styled.section`
-  margin-bottom: 1rem;
-`;
-
-const Panel = styled.div`
-  padding: 0 18px;
-  display: ${({ displayed }) => (displayed ? "block" : "none")};
-  overflow: hidden;
-`;
+import Heading from "../Typography/Heading";
 
 const HeaderButton = styled.button`
-  width: 100%;
-  padding: 1rem;
+  display: block;
+  background: white;
+  border: 2px solid white;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.sizes.h2};
+  font-weight: normal;
+  margin: 0;
+  position: relative;
   text-align: left;
-  background-color: #EAEEF1;
+  width: 100%;
+  outline: none;
   cursor: pointer;
-  border: 0;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1));
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    border: ${({ theme }) => theme.textfield.border};
+  }
+  &:focus {
+    border: ${({ theme }) => theme.textfield.border};
   }
 `;
 
-function Accordion({ children, title }) {
+const Panel = styled.div`
+  display: ${({ displayed }) => (displayed ? "block" : "none")};
+  margin: 0;
+`;
+
+function Accordion({ children, title, index }) {
   const [displayPanel, setDisplayPanel] = useState(false);
 
   return (
-    <Container>
-      <HeaderButton onClick={() => setDisplayPanel(!displayPanel)}>
-        <Heading as="h2">{title}</Heading>
+    <>
+      <HeaderButton
+        aria-expanded={displayPanel}
+        aria-disabled={displayPanel}
+        aria-controls={`sect${index}`}
+        id={`accordion${index}id`}
+        onClick={() => setDisplayPanel(!displayPanel)}
+      >
+        <Heading as="h3">
+          {title}
+        </Heading>
       </HeaderButton>
-      <Panel displayed={displayPanel}>{children}</Panel>
-    </Container>
+      <Panel
+        id={`sect${index}`}
+        role="region"
+        aria-labelledby={`accordion${index}id`}
+        displayed={displayPanel}
+      >
+        {children}
+      </Panel>
+    </>
   );
 }
 

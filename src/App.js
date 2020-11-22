@@ -7,7 +7,8 @@ import * as wording from "./conf/wording";
 import AppContext from "./context/AppContext";
 import Accordion from "./Accordion/Accordion";
 import DesignProperty from "./DesignProperty/DesignProperty";
-import Heading from "./Heading/Heading";
+import Heading from "./Typography/Heading";
+import Button from "./Button/Button";
 
 const Container = styled.div`
     width: 100%;
@@ -16,6 +17,11 @@ const Container = styled.div`
     margin-right: auto;
     margin-left: auto;
     max-width: 1140px;
+`;
+
+const AccordionGroup = styled.div`
+  margin: 0;
+  padding: 0;
 `;
 
 /**
@@ -67,8 +73,9 @@ function App() {
           <header>
             <Heading as="h1">Simple Theme Editor</Heading>
           </header>
-          {Object.keys(theme).map((component) => (
-            <Accordion key={component} title={component}>
+          <AccordionGroup>
+            {Object.keys(theme).map((component, index) => (
+            <Accordion key={component} index={index} title={component}>
               {Object.entries(theme[component]).map(([item, value]) => (
                 <DesignProperty
                   key={`${component}.${item}`}
@@ -78,8 +85,9 @@ function App() {
                 />
               ))}
             </Accordion>
-          ))}
-          <button onClick={() => setThemeInLocalStorage(theme)}>Save</button>
+            ))}
+          </AccordionGroup>
+          <Button onClick={() => setThemeInLocalStorage(theme)}>Save</Button>
         </Container>
       </ThemeProvider>
     </AppContext.Provider>

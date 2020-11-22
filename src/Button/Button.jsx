@@ -1,11 +1,19 @@
 import styled from "styled-components";
 
 const Button = styled.button`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
+  background-color: ${({ theme }) => theme.buttons.background};
+  color: ${({ theme }) => theme.buttons.color};
+  font-size: ${({ theme }) => theme.buttons.fontSize};
+  padding: 0.5rem 1rem;
+  border: none;
   cursor: pointer;
-  padding: 0.5rem;
-  border: 2px solid ${({ theme }) => theme.colors.primary};
+
+  &:hover {
+    border-color: black;
+  }
+  &:focus {
+    border-color: black;
+  }
 `;
 
 export default Button;

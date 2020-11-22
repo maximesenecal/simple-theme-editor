@@ -3,23 +3,32 @@ import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
 import EditPanel from "./EditPanel/EditPanel";
+import Text from "../Typography/Text";
 
 const Container = styled.div`
-  display: flex;
-  margin-top: 0.5rem;
-  border-bottom: 1px solid black;
+  margin-bottom: 1rem;
 `;
 
-const PreviewPanel = styled.div`
+const PreviewPanel = styled.button`
   display: flex;
-  width: 100%;
-  padding: 0 1rem;
   justify-content: space-between;
   align-items: center;
+  background: white;
+  border: 2px solid white;
+  color: ${({ theme }) => theme.textfield.fontColor};
+  margin: 0;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  outline: none;
   cursor: pointer;
+  filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1));
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    border: ${({ theme }) => theme.textfield.border};
+  }
+  &:focus {
+    border: ${({ theme }) => theme.textfield.border};
   }
 `;
 
@@ -48,19 +57,20 @@ function DesignProperty({ reference, value, label }) {
 
   return (
     <Container>
-      { editable ? (
+      <PreviewPanel onClick={() => setEditable(!editable)}>
+        <Text>
+          {label}
+          <span><b>{replaceRefsinValue(value)}</b></span>
+        </Text>
+        <i>{reference}</i>
+      </PreviewPanel>
+      {editable && (
         <EditPanel
           reference={reference}
           currentValue={value}
           onClose={() => setEditable(false)}
         />
-      ) : (
-          <PreviewPanel onClick={() => setEditable(true)}>
-            <p>{label}</p>
-            <p>{replaceRefsinValue(value)}</p>
-            <i>{reference}</i>
-          </PreviewPanel>
-        )}
+      )}
     </Container>
   );
 }

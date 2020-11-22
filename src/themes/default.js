@@ -1,8 +1,8 @@
 const colors = {
-  primary: "#4CB1F8",
-  primaryBackground: "#EBEEF1",
+  primary: "#3B8B8D",
+  primaryBackground: "white",
   secondary: "#000126",
-  secondaryBackground: "#EEEEEE",
+  secondaryBackground: "#F8F8F8",
   highlight1: "#4CB1F8",
   highlight2: "#4CB1F8",
 };
@@ -16,15 +16,15 @@ const sizes = {
 
 const textfield = {
   textSize: "1.2em",
-  fontColor: "#000126",
-  border: `${colors.primary} solid #000000`,
-  background: "#000126",
+  fontColor: "#000000",
+  border: `2px solid ${colors.primary}`,
+  background: colors.primaryBackground,
 }
 
 const buttons = {
-  fontSize: 'calc(1.1*1.2)rem',
-  color: "#000126",
-  background: "#000126",
+  fontSize: '0.8em',
+  color: "#FFFFFF",
+  background: colors.primary,
 }
 
 export { colors, sizes, textfield, buttons };

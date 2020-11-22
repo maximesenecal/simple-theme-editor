@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { useState } from "react";
+import styled, { ThemeContext } from "styled-components";
+import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
 import EditPanel from "./EditPanel/EditPanel";
@@ -25,6 +25,26 @@ const PreviewPanel = styled.div`
 
 function DesignProperty({ reference, value, label }) {
   const [editable, setEditable] = useState(false);
+  const themeContext = useContext(ThemeContext);
+
+  function replaceRefsinValue(value) {
+    function replaceRef(ref) {
+      const category = ref.substring(
+        ref.lastIndexOf("{") + 1,
+        ref.lastIndexOf(".")
+      );
+      const component = ref.substring(
+        ref.lastIndexOf(".") + 1,
+        ref.lastIndexOf("}")
+      );
+      if (themeContext[category][component]) { // Get value if exists
+        return themeContext[category][component];
+      }
+    }
+    let regex = /{.*?}/g; // Regex to match references between {}
+    const result = value.replace(regex, replaceRef);
+    return result;
+  }
 
   return (
     <Container>
@@ -37,7 +57,7 @@ function DesignProperty({ reference, value, label }) {
       ) : (
           <PreviewPanel onClick={() => setEditable(true)}>
             <p>{label}</p>
-            <p>{value}</p>
+            <p>{replaceRefsinValue(value)}</p>
             <i>{reference}</i>
           </PreviewPanel>
         )}

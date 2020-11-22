@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 
 import * as defaultTheme from "./themes/default";
+import * as wording from "./conf/wording";
 
 import AppContext from "./context/AppContext";
 import Accordion from "./Accordion/Accordion";
@@ -12,12 +13,8 @@ import Heading from "./Heading/Heading";
  * Get theme in localStorage
  */
 function getLocalStorageTheme() {
-  try {
-    const theme = localStorage.getItem('simpleEditorTheme');
-    return JSON.parse(theme);
-  } catch (err) {
-    console.error('Could not loading theme in local storage, loading default instead.', err);
-  }
+  const theme = localStorage.getItem('simpleEditorTheme');
+  return JSON.parse(theme);
 }
 
 /**
@@ -31,37 +28,29 @@ function setThemeInLocalStorage(themeObject) {
 function App() {
   const [theme, setTheme] = useState(defaultTheme);
 
-  /**
-   * Check references in value
-   * @param {String} value User value
-   */
-  function replaceRefValues(value) {
-    function replaceRef(ref) {
-      // Extract component ref
-      const component = ref.substring(
-        ref.lastIndexOf("{") + 1,
-        ref.lastIndexOf(".")
-      );
-      // Extract key ref
-      const key = ref.substring(
-        ref.lastIndexOf(".") + 1,
-        ref.lastIndexOf("}")
-      );
-      if (theme[component][key]) { // Get value if exists
-        return theme[component][key];
-      }
+  // Set local theme on mount when exists
+  useEffect(() => {
+    const localTheme = getLocalStorageTheme();
+    if (localTheme) {
+      console.log('apply local theme', theme);
+      setTheme(localTheme);
     }
-    let regex = /{.*?}/g; // Regex to match property between {}
-    const result = value.replace(regex, replaceRef);
-    return result;
-  }
+    console.log('update theme', theme);
+  }, [theme])
 
-  // Should update all references when a value change
-  function updateTheme(reference, value) {
-    // setTheme({
-    //   ...theme,
-    //   [reference]: value,
-    // });
+  function updateTheme(property, value) {
+    const reference = property.split('.');
+    const category = reference[0];
+    const component = reference[1];
+
+    const updateTheme = {
+      ...theme,
+      [category]: {
+        ...theme[category],
+        [component]: value,
+      },
+    }
+    setTheme(updateTheme);
   }
 
   return (
@@ -77,12 +66,12 @@ function App() {
                 key={`${component}.${item}`}
                 reference={`${component}.${item}`}
                 value={value}
-                label={`${component}.${item}`}
+                label={wording[component][item]}
               />
             ))}
           </Accordion>
         ))}
-        <button onClick={() => setTheme()}>Save</button>
+        <button onClick={() => setThemeInLocalStorage(theme)}>Save</button>
       </ThemeProvider>
     </AppContext.Provider>
   );

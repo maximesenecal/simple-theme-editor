@@ -43,7 +43,7 @@ function Accordion({ children, title, index }) {
         id={`accordion${index}id`}
         onClick={() => setDisplayPanel(!displayPanel)}
       >
-        <Heading as="h3">
+        <Heading as="h2">
           {title}
         </Heading>
       </HeaderButton>

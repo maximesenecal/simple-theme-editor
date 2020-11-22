@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
-const Heading = styled.p`
-  font-size: ${({ as, theme }) => theme.sizes[as]};
+const Heading = styled.h1`
+  font-size: ${({ as, theme }) => {
+    switch(as) {
+      case 'h2':
+        return theme.sizes.h2;
+      default:
+        return theme.sizes.h1;
+    };
+  }};
 `;
 
 export default Heading;

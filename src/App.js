@@ -71,7 +71,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Container>
           <header>
-            <Heading as="h1">Simple Theme Editor</Heading>
+            <Heading>Simple Theme Editor</Heading>
           </header>
           <AccordionGroup>
             {Object.keys(theme).map((component, index) => (

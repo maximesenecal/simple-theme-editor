@@ -16,8 +16,8 @@ const FormContainer = styled.form`
 
 const CloseButton = styled(Button)`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 16px;
+  top: 16px;
 `;
 
 function EditPanel({ reference, currentValue, onClose }) {

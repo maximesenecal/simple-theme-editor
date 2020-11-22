@@ -15,4 +15,3 @@ test("should not update current value when change input value", () => {
 
 test("should update theme and close panel when click on update button", () => {
 });
-

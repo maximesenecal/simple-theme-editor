@@ -15,7 +15,7 @@ const PreviewPanel = styled.button`
   align-items: center;
   background: white;
   border: 2px solid white;
-  color: ${({ theme }) => theme.textfield.fontColor};
+  color: ${({ theme }) => theme.colors.secondary};
   margin: 0;
   position: relative;
   text-align: left;

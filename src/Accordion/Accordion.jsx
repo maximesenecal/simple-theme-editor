@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Heading from "../Heading/Heading";
 
 const Container = styled.section`
-  width: 50%;
   margin-bottom: 1rem;
 `;
 

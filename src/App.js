@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import * as defaultTheme from "./themes/default";
 import * as wording from "./conf/wording";
@@ -8,6 +8,15 @@ import AppContext from "./context/AppContext";
 import Accordion from "./Accordion/Accordion";
 import DesignProperty from "./DesignProperty/DesignProperty";
 import Heading from "./Heading/Heading";
+
+const Container = styled.div`
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1140px;
+`;
 
 /**
  * Get theme in localStorage
@@ -32,11 +41,9 @@ function App() {
   useEffect(() => {
     const localTheme = getLocalStorageTheme();
     if (localTheme) {
-      console.log('apply local theme', theme);
       setTheme(localTheme);
     }
-    console.log('update theme', theme);
-  }, [theme])
+  }, [])
 
   function updateTheme(property, value) {
     const reference = property.split('.');
@@ -56,22 +63,24 @@ function App() {
   return (
     <AppContext.Provider value={{ updateTheme }}>
       <ThemeProvider theme={theme}>
-        <header>
-          <Heading as="h1">Simple Theme Editor</Heading>
-        </header>
-        {Object.keys(theme).map((component) => (
-          <Accordion key={component} title={component}>
-            {Object.entries(theme[component]).map(([item, value]) => (
-              <DesignProperty
-                key={`${component}.${item}`}
-                reference={`${component}.${item}`}
-                value={value}
-                label={wording[component][item]}
-              />
-            ))}
-          </Accordion>
-        ))}
-        <button onClick={() => setThemeInLocalStorage(theme)}>Save</button>
+        <Container>
+          <header>
+            <Heading as="h1">Simple Theme Editor</Heading>
+          </header>
+          {Object.keys(theme).map((component) => (
+            <Accordion key={component} title={component}>
+              {Object.entries(theme[component]).map(([item, value]) => (
+                <DesignProperty
+                  key={`${component}.${item}`}
+                  reference={`${component}.${item}`}
+                  value={value}
+                  label={wording[component][item]}
+                />
+              ))}
+            </Accordion>
+          ))}
+          <button onClick={() => setThemeInLocalStorage(theme)}>Save</button>
+        </Container>
       </ThemeProvider>
     </AppContext.Provider>
   );

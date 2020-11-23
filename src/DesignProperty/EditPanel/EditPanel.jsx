@@ -25,8 +25,7 @@ function EditPanel({ reference, currentValue, onClose }) {
   const [value, setValue] = useState(currentValue);
   const context = useContext(AppContext);
 
-  function handleClick(e) {
-    e.preventDefault();
+  function handleClick() {
     const { updateTheme } = context;
     let newValue = value;
     switch (type) {
@@ -64,8 +63,8 @@ function EditPanel({ reference, currentValue, onClose }) {
           <label htmlFor={`${reference}-select-${item}`}>{item}</label>
         </div>
       ))}
-      <Button type="submit" onClick={() => handleClick()}>Update</Button>
-      <CloseButton id="close-edit" onClick={() => onClose()}>Close</CloseButton>
+      <Button id="update-button" onClick={() => handleClick()}>Update</Button>
+      <CloseButton id="close-button" onClick={() => onClose()}>Close</CloseButton>
     </Container>
   );
 }

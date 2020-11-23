@@ -33,7 +33,7 @@ describe('<DesignProperty />', () => {
   test("should close edit panel when user click on close button", () => {
     const button = wrapper.find('button#header-panel');
     button.simulate('click');
-    const close = wrapper.find('button#close-edit');
+    const close = wrapper.find('button#close-button');
     close.simulate('click');
     const editPanel = wrapper.find('EditPanel');
     expect(editPanel.exists()).toBe(false);

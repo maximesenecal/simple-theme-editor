@@ -28,11 +28,6 @@ const HeaderButton = styled.button`
   }
 `;
 
-const Panel = styled.div`
-  display: ${({ displayed }) => (displayed ? "block" : "none")};
-  margin: 0;
-`;
-
 function Accordion({ children, title, index }) {
   const [displayPanel, setDisplayPanel] = useState(false);
 
@@ -49,14 +44,15 @@ function Accordion({ children, title, index }) {
           {title}
         </Heading>
       </HeaderButton>
-      <Panel
-        id={`sect${index}`}
-        role="region"
-        aria-labelledby={`accordion${index}id`}
-        displayed={displayPanel}
-      >
-        {children}
-      </Panel>
+      { displayPanel && (
+        <div
+          id={`sect${index}`}
+          role="region"
+          aria-labelledby={`accordion${index}id`}
+        >
+          {children}
+        </div>
+      )}
     </>
   );
 }

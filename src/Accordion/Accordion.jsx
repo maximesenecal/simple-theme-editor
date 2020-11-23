@@ -1,5 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+
 import Heading from "../Typography/Heading";
 
 const HeaderButton = styled.button`
@@ -58,5 +60,13 @@ function Accordion({ children, title, index }) {
     </>
   );
 }
+
+Accordion.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+};
+
+Accordion.defaultProps = {};
 
 export default Accordion;

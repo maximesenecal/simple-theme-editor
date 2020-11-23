@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
 import * as defaultTheme from "./themes/default";
@@ -56,14 +56,14 @@ function App() {
     const category = reference[0];
     const component = reference[1];
 
-    const updateTheme = {
+    const newTheme = {
       ...theme,
       [category]: {
         ...theme[category],
         [component]: value,
       },
     }
-    setTheme(updateTheme);
+    setTheme(newTheme);
   }
 
   return (

@@ -1,5 +1,5 @@
 import styled, { ThemeContext } from "styled-components";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
 import EditPanel from "./EditPanel/EditPanel";
@@ -36,7 +36,7 @@ function DesignProperty({ reference, value, label }) {
   const [editable, setEditable] = useState(false);
   const themeContext = useContext(ThemeContext);
 
-  function replaceRefsinValue(value) {
+  function replaceRefsinValue(str) {
     function replaceRef(ref) {
       const category = ref.substring(
         ref.lastIndexOf("{") + 1,
@@ -49,18 +49,19 @@ function DesignProperty({ reference, value, label }) {
       if (themeContext[category][component]) { // Get value if exists
         return themeContext[category][component];
       }
+      return 'error';
     }
-    let regex = /{.*?}/g; // Regex to match references between {}
-    const result = value.replace(regex, replaceRef);
+    const regex = /{.*?}/g; // Regex to match references between {}
+    const result = str.replace(regex, replaceRef);
     return result;
   }
 
   return (
     <Container>
-      <PreviewPanel onClick={() => setEditable(!editable)}>
+      <PreviewPanel id="header-panel" onClick={() => setEditable(!editable)}>
         <Text>
           {label}
-          <span><b>{replaceRefsinValue(value)}</b></span>
+          <span id="value"><b>{replaceRefsinValue(value)}</b></span>
         </Text>
         <i>{reference}</i>
       </PreviewPanel>
@@ -76,9 +77,9 @@ function DesignProperty({ reference, value, label }) {
 }
 
 DesignProperty.propTypes = {
-  reference: PropTypes.string,
+  reference: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.string.isRequired,
 };
 
 DesignProperty.defaultProps = {

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import AppContext from "../../context/AppContext";
@@ -9,7 +9,7 @@ import Text from "../../Typography/Text";
 
 const types = ['text', 'em', 'rem', 'color'];
 
-const FormContainer = styled.form`
+const Container = styled.div`
   position: relative;
   padding: 1rem;
 `;
@@ -25,7 +25,7 @@ function EditPanel({ reference, currentValue, onClose }) {
   const [value, setValue] = useState(currentValue);
   const context = useContext(AppContext);
 
-  function handleSubmit(e) {
+  function handleClick(e) {
     e.preventDefault();
     const { updateTheme } = context;
     let newValue = value;
@@ -42,43 +42,38 @@ function EditPanel({ reference, currentValue, onClose }) {
   }
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
-      <fieldset>
-        <legend>
-          <Text as="label" htmlFor={`${reference}-input`}>Value :</Text>
-        </legend>
-        <TextInput
-          type={type === "color" ? "color" : "text"}
-          id={`${reference}-input`}
-          name={`${reference}-input`}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-      </fieldset>
-      <fieldset role="radiogroup">
-        <legend>Type:</legend>
-        {types.map((item) => (
-          <>
-            <input
-              type="radio"
-              id={`${reference}-select-${item}`}
-              name={`${reference}-select-type`}
-              value={item}
-              onChange={(e) => setType(item)}
-            />
-            <label htmlFor={`${reference}-select-${item}`}>{item}</label>
-          </>
-        ))}
-      </fieldset>
-      <Button type="submit">Update</Button>
-      <CloseButton onClick={() => onClose()}>Close</CloseButton>
-    </FormContainer>
+    <Container>
+      <Text as="label" htmlFor={`${reference}-input`}>Value :</Text>
+      <TextInput
+        type={type === "color" ? "color" : "text"}
+        id={`${reference}-input`}
+        name={`${reference}-input`}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <Text>Type:</Text>
+      {types.map((item) => (
+        <div key={item}>
+          <input
+            type="radio"
+            id={`${reference}-select-${item}`}
+            name={`${reference}-select-type`}
+            value={item}
+            onChange={() => setType(item)}
+          />
+          <label htmlFor={`${reference}-select-${item}`}>{item}</label>
+        </div>
+      ))}
+      <Button type="submit" onClick={() => handleClick()}>Update</Button>
+      <CloseButton id="close-edit" onClick={() => onClose()}>Close</CloseButton>
+    </Container>
   );
 }
 
 EditPanel.propTypes = {
   reference: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 EditPanel.defaultProps = {};

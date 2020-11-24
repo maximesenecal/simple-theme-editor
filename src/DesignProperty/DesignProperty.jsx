@@ -2,8 +2,9 @@ import styled, { ThemeContext } from "styled-components";
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
-import EditPanel from "./EditPanel/EditPanel";
+import EditPanel from "../EditPanel/EditPanel";
 import Text from "../Typography/Text";
+import { regex, getRefInTheme } from "../helpers/references";
 
 const Container = styled.div`
   margin-bottom: 1rem;
@@ -36,24 +37,8 @@ function DesignProperty({ reference, value, label }) {
   const [editable, setEditable] = useState(false);
   const themeContext = useContext(ThemeContext);
 
-  function replaceRefsinValue(str) {
-    function replaceRef(ref) {
-      const category = ref.substring(
-        ref.lastIndexOf("{") + 1,
-        ref.lastIndexOf(".")
-      );
-      const component = ref.substring(
-        ref.lastIndexOf(".") + 1,
-        ref.lastIndexOf("}")
-      );
-      if (themeContext[category][component]) { // Get value if exists
-        return themeContext[category][component];
-      }
-      return 'error';
-    }
-    const regex = /{.*?}/g; // Regex to match references between {}
-    const result = str.replace(regex, replaceRef);
-    return result;
+  function replaceRefs(str) {
+    return str.replace(regex, (ref) => getRefInTheme(ref, themeContext));
   }
 
   return (
@@ -61,7 +46,7 @@ function DesignProperty({ reference, value, label }) {
       <PreviewPanel id="header-panel" onClick={() => setEditable(!editable)}>
         <Text>
           {label}
-          <span id="value"><b>{replaceRefsinValue(value)}</b></span>
+          <span id="value"><b>{replaceRefs(value)}</b></span>
         </Text>
         <i>{reference}</i>
       </PreviewPanel>

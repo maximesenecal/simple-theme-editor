@@ -41,7 +41,7 @@ describe('<DesignProperty />', () => {
 });
 
 test("should replace reference in value when detect one", () => {
-  const valueWithRef = '{colors.primary}';
+  const valueWithRef = '{sizes.borderWidth} solid {colors.primary}';
 
   const wrapper = mount(
     <ThemeProvider theme={defaultTheme}>
@@ -50,7 +50,7 @@ test("should replace reference in value when detect one", () => {
   );
 
   const headerPanel = wrapper.find('span#value');
-  expect(headerPanel.text()).toBe('#3B8B8D');
+  expect(headerPanel.text()).toBe('1px solid #3B8B8D');
 });
 
 

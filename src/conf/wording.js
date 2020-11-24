@@ -1,3 +1,10 @@
+const sections = {
+  colors: 'Global colors',
+  sizes: "Global sizes",
+  textfield: "Global textfield",
+  buttons: "Global buttons",
+};
+
 const colors = {
     primary: "Primary font color",
     primaryBackground: "Primary background color",
@@ -27,5 +34,5 @@ const colors = {
     background: "Background",
   }
   
-  export { colors, sizes, textfield, buttons };
+  export { sections, colors, sizes, textfield, buttons };
   

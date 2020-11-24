@@ -11,7 +11,7 @@ const sizes = {
   text: "1.1em",
   h1: "1.4em",
   h2: "1.2em",
-  borderWidth: "1.2em",
+  borderWidth: "1px",
 };
 
 const textfield = {

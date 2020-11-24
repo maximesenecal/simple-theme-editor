@@ -6,7 +6,6 @@ import Accordion from "./Accordion";
 import * as defaultTheme from "../themes/default";
 
 const title = 'Global colors';
-const index = 0;
 
 describe('<Accordion />', () => {
     let wrapper;
@@ -14,7 +13,7 @@ describe('<Accordion />', () => {
     beforeEach(() => {
         wrapper = mount(
             <ThemeProvider theme={defaultTheme}>
-                <Accordion title={title} index={index}>
+                <Accordion title={title}>
                     <div id="children">children</div>
                 </Accordion>;
             </ThemeProvider>
@@ -28,9 +27,17 @@ describe('<Accordion />', () => {
     test("should open panel children when click on header accordion", () => {
         expect(wrapper.find('#children').exists()).toBe(false);
         const button = wrapper.find('button#accordion0id');
-        button.simulate('click');
+        button.simulate('click'); // Open
         const editPanel = wrapper.find('#children');
         expect(editPanel.exists()).toBe(true);
+    });
+
+    test("should close panel children when click on header accordion", () => {
+        const button = wrapper.find('button#accordion0id');
+        button.simulate('click'); // Open
+        button.simulate('click'); // Close
+        const editPanel = wrapper.find('#children');
+        expect(editPanel.exists()).toBe(false);
     });
 });
 

@@ -57,12 +57,14 @@ function Accordion({ children, title, index }) {
   );
 }
 
+Accordion.defaultProps = {
+  index: 0,
+};
+
 Accordion.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
+  index: PropTypes.number,
 };
-
-Accordion.defaultProps = {};
 
 export default Accordion;

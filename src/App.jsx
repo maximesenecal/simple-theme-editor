@@ -28,16 +28,19 @@ const AccordionGroup = styled.div`
  * Get theme in localStorage
  */
 function getLocalStorageTheme() {
-  const theme = localStorage.getItem('simpleEditorTheme');
-  return JSON.parse(theme);
+  const localTheme = localStorage.getItem('simpleEditorTheme');
+  if (localTheme) {
+    return JSON.parse(localTheme);
+  }
+  return null;
 }
 
 /**
- * Set editor theme in local storage
- * @param {Object} themeObject New editor theme
- */
-function setThemeInLocalStorage(themeObject) {
-  localStorage.setItem('simpleEditorTheme', JSON.stringify(themeObject));
+* Set editor theme in local storage
+* @param {Object} themeObject New editor theme
+*/
+function setThemeInLocalStorage(theme) {
+  localStorage.setItem('simpleEditorTheme', JSON.stringify(theme));
 }
 
 function App() {
@@ -75,19 +78,19 @@ function App() {
           </header>
           <AccordionGroup>
             {Object.keys(theme).map((component, index) => (
-            <Accordion key={component} index={index} title={component}>
-              {Object.entries(theme[component]).map(([item, value]) => (
-                <DesignProperty
-                  key={`${component}.${item}`}
-                  reference={`${component}.${item}`}
-                  value={value}
-                  label={wording[component][item]}
-                />
-              ))}
-            </Accordion>
+              <Accordion key={component} index={index} title={wording.sections[component]}>
+                {Object.entries(theme[component]).map(([item, value]) => (
+                  <DesignProperty
+                    key={`${component}.${item}`}
+                    reference={`${component}.${item}`}
+                    value={value}
+                    label={wording[component][item]}
+                  />
+                ))}
+              </Accordion>
             ))}
           </AccordionGroup>
-          <Button onClick={() => setThemeInLocalStorage(theme)}>Save</Button>
+          <Button id="save-button" onClick={() => setThemeInLocalStorage(theme)}>Save</Button>
         </Container>
       </ThemeProvider>
     </AppContext.Provider>

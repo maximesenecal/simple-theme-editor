@@ -8,26 +8,21 @@ import TextInput from "../TextInput/TextInput";
 import Text from "../Typography/Text";
 import { validateReferences } from "../helpers/references";
 
-const types = ['text', 'em', 'rem', 'color'];
+const types = ['text', 'em', 'rem', 'px', 'color'];
 
-const Container = styled.form`
-  position: relative;
-  padding: 1rem;
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  padding: 0.5rem;
+  margin-top: 5px;
 `;
 
-const CloseButton = styled(Button)`
-  position: absolute;
-  right: 16px;
-  top: 16px;
+const HeaderEdit = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const ErrorText = styled.p`
-    font-size: ${({ theme }) => theme.textfield.textSize};;
-    font-weight: bold;
-    color: red;
-`;
-
-function EditPanel({ reference, currentValue, onClose }) {
+function EditPanel({ header, reference, currentValue, onClose }) {
   const [type, setType] = useState('text');
   const [value, setValue] = useState(currentValue);
   const [error, setError] = useState(null);
@@ -59,39 +54,46 @@ function EditPanel({ reference, currentValue, onClose }) {
 
   return (
     <Container>
-      <Text as="label" htmlFor={`${reference}-input`}>Value :</Text>
-      <TextInput
-        type={type === "color" ? "color" : "text"}
-        id={`${reference}-input`}
-        name={`${reference}-input`}
-        value={value}
-        onChange={handleChange}
-      />
-      { error && (
-        <ErrorText id="error-message">
-          { error}
-        </ErrorText>
-      )}
-      <Text>Type:</Text>
-      {types.map((item) => (
-        <div key={item}>
-          <input
-            type="radio"
-            id={`${reference}-select-${item}`}
-            name={`${reference}-select-type`}
-            value={item}
-            onChange={() => setType(item)}
-          />
-          <label htmlFor={`${reference}-select-${item}`}>{item}</label>
-        </div>
-      ))}
-      <Button disabled={!!error} id="update-button" onClick={() => handleClick()}>Update</Button>
-      <CloseButton id="close-button" onClick={() => onClose()}>Close</CloseButton>
+      <HeaderEdit>
+        <Text bold>{header}</Text>
+        <Button id="close-button" onClick={() => onClose()}>Close</Button>
+      </HeaderEdit>
+      <fieldset>
+        <Text as="label" htmlFor={`${reference}-input`}>Value</Text>
+        <TextInput
+          type={type === "color" ? "color" : "text"}
+          id={`${reference}-input`}
+          name={`${reference}-input`}
+          value={value}
+          onChange={handleChange}
+          error={error}
+          aria-invalid={!!error}
+          aria-describedby={error ? "error-message" : undefined}
+        />
+      </fieldset>
+      <fieldset>
+        <Text>Type</Text>
+        {types.map((item, index) => (
+          <div key={item}>
+            <input
+              type="radio"
+              id={`${reference}-select-${index}`}
+              name={`${reference}-select-type`}
+              value={item}
+              onChange={() => setType(item)}
+              defaultChecked={index === 0}
+            />
+            <label htmlFor={`${reference}-select-${index}`}>{item}</label>
+          </div>
+        ))}
+      </fieldset>
+      <Button type="submit" disabled={!!error} id="update-button" onClick={() => handleClick()}>Update</Button>
     </Container>
   );
 }
 
 EditPanel.propTypes = {
+  header: PropTypes.string.isRequired,
   reference: PropTypes.string.isRequired,
   currentValue: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,

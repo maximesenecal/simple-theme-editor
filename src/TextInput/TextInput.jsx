@@ -1,24 +1,52 @@
+/* eslint-disable react/jsx-props-no-spreading */
+import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
-const TextInput = styled.input`
+import { ReactComponent as Alert } from "./alert-circle.svg";
+
+const StyledInput = styled.input`
     box-sizing: border-box;
-    margin: 0.2rem 0;
     font-size: ${({ theme }) => theme.textfield.textSize};;
-    vertical-align: initial;
-    height: 2.5rem;
-    padding: 0 1rem;
+    height: 30px;
+    padding: 0 10px;
+    margin-top: 10px;
     color: ${({ theme }) => theme.textfield.fontColor};
     background-color: ${({ theme }) => theme.textfield.background};
-    border: ${({ theme, error }) => error ? "1px solid red" : theme.textfield.border};
+    border: ${({ theme, error }) => error ? "2px solid red" : theme.textfield.border};
 
     &[type="color"] {
         padding: 0;
-        outline: none;
-        border: none;
-    }
-
-    &:focus {
     }
 `;
+
+const ErrorText = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: red;
+  margin-top: 7px;
+`;
+
+const TextInput = React.forwardRef(({ error, ...rest}, ref) => (
+    <div>
+        <StyledInput ref={ref} error={error} {...rest} />
+        {error && (
+            <ErrorText id="error-message">
+                <Alert width={18} height={18} style={{ marginRight: 5 }} />
+                {error}
+            </ErrorText>
+        )}
+    </div>
+));
+
+TextInput.propTypes = {
+    error: PropTypes.string,
+};
+
+TextInput.defaultProps = {
+    error: null,
+};
 
 export default TextInput;

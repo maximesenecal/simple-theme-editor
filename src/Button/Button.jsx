@@ -8,11 +8,9 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
 
-  &:hover {
-    border-color: black;
-  }
-  &:focus {
-    border-color: black;
+  &:disabled {
+    background-color: grey;
+    cursor: not-allowed;
   }
 `;
 

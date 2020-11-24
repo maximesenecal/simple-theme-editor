@@ -7,56 +7,52 @@ import Text from "../Typography/Text";
 import { regex, getRefInTheme } from "../helpers/references";
 
 const Container = styled.div`
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
 `;
 
 const PreviewPanel = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
-  border: 2px solid white;
-  color: ${({ theme }) => theme.colors.secondary};
+  background-color: ${({ theme }) => theme.colors.primaryBackground};
   margin: 0;
   position: relative;
   text-align: left;
   width: 100%;
-  outline: none;
   cursor: pointer;
-  filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1));
+  border: none;
 
   &:hover {
-    border: ${({ theme }) => theme.textfield.border};
+    background-color: ${({ theme }) => theme.colors.secondaryBackground};
+    transition: 0.2s ease-in;
   }
   &:focus {
-    border: ${({ theme }) => theme.textfield.border};
+    background-color: ${({ theme }) => theme.colors.secondaryBackground};
   }
 `;
 
 function DesignProperty({ reference, value, label }) {
   const [editable, setEditable] = useState(false);
   const themeContext = useContext(ThemeContext);
-
-  function replaceRefs(str) {
-    return str.replace(regex, (ref) => getRefInTheme(ref, themeContext));
-  }
+  const header = `${label} - ${value.replace(regex, (ref) => getRefInTheme(ref, themeContext))}`;
 
   return (
     <Container>
-      <PreviewPanel id="header-panel" onClick={() => setEditable(!editable)}>
-        <Text>
-          {label}
-          <span id="value"><b>{replaceRefs(value)}</b></span>
-        </Text>
-        <i>{reference}</i>
-      </PreviewPanel>
-      {editable && (
+      {editable ? (
         <EditPanel
-          reference={reference}
+          header={header}
           currentValue={value}
+          reference={reference}
           onClose={() => setEditable(false)}
         />
-      )}
+      ) : (
+          <PreviewPanel id="header-panel" onClick={() => setEditable(!editable)}>
+            <Text id="value">
+              {header}
+            </Text>
+            <i>{reference}</i>
+          </PreviewPanel>
+        )}
     </Container>
   );
 }

@@ -14,7 +14,7 @@ export function getRefInTheme(ref, theme) {
         ref.lastIndexOf(".") + 1,
         ref.lastIndexOf("}")
     );
-    return theme[category][component];
+    return theme[category][component] || null;
 }
 
 /**

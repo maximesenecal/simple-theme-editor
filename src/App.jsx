@@ -12,16 +12,19 @@ import Button from "./Button/Button";
 
 const Container = styled.div`
     width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-    max-width: 1140px;
+    background-color: ${({ theme }) => theme.colors.primaryBackground};
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: ${({ theme }) => theme.colors.primary};;
 `;
 
 const AccordionGroup = styled.div`
   margin: 0;
   padding: 0;
+  min-width: 70vh;
 `;
 
 /**

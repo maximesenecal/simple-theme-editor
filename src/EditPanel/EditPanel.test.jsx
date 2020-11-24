@@ -6,6 +6,7 @@ import EditPanel from "./EditPanel";
 import * as defaultTheme from "../themes/default";
 import AppContext from "../context/AppContext";
 
+const header = "General colors";
 const reference = 'colors.primary';
 const currentValue = '#ffffff';
 const onClose = jest.fn();
@@ -18,7 +19,7 @@ describe('<EditPanel />', () => {
     wrapper = mount(
       <AppContext.Provider value={{ updateTheme }}>
         <ThemeProvider theme={defaultTheme}>
-          <EditPanel reference={reference} currentValue={currentValue} onClose={onClose} />,);
+          <EditPanel header={header} reference={reference} currentValue={currentValue} onClose={onClose} />,);
       </ThemeProvider>
       </AppContext.Provider>
     );
@@ -48,9 +49,9 @@ describe('<EditPanel />', () => {
     const input = wrapper.find('input[type="text"]');
     input.simulate('focus');
     input.simulate('change', { target: { value: '{sizes.borderWidth} solid {colors.toto}' }});
-    const error = wrapper.find('p#error-message');
+    const error = wrapper.find('span#error-message');
     const button = wrapper.find('button#update-button');
     expect(button.props().disabled).toBe(true);
-    expect(error.text()).toBe("Reference {colors.toto} doesn't exists.");
+    expect(error.exists()).toBe(true);
   });
 });

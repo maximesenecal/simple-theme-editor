@@ -1,24 +1,24 @@
 const colors = {
-  primary: "#3B8B8D",
-  primaryBackground: "white",
-  secondary: "#000126",
-  secondaryBackground: "#F8F8F8",
+  primary: "#393b44",
+  primaryBackground: "#f1f3f8",
+  secondary: "#8d93ab",
+  secondaryBackground: "#d6e0f0",
   highlight1: "#4CB1F8",
-  highlight2: "#4CB1F8",
+  highlight2: "#ec5858",
 };
 
 const sizes = {
-  text: "1.1em",
+  text: "14px",
   h1: "1.4em",
   h2: "1.2em",
   borderWidth: "1px",
 };
 
 const textfield = {
-  textSize: "1.2em",
-  fontColor: "#000000",
+  textSize: "1em",
+  fontColor: "#393b44",
   border: `2px solid ${colors.primary}`,
-  background: colors.primaryBackground,
+  background: "white",
 }
 
 const buttons = {

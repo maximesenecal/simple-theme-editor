@@ -91,17 +91,17 @@ function EditPanel({ header, currentValue, currentType, component, item, onClose
         />
         <Text>Type</Text>
         <RadioContainer>
-          {Object.keys(types).map((itemType, index) => (
-            <React.Fragment key={itemType}>
+          {Object.keys(types).map((inputType, index) => (
+            <React.Fragment key={`type-${component}-${item}-${inputType}`}>
               <input
                 type="radio"
-                id={`select-type-${itemType}-${index}`}
+                id={`select-type-${component}-${item}-${index}`}
                 name="select-type"
-                value={itemType}
-                onChange={() => setType(itemType)}
-                defaultChecked={itemType === currentType}
+                value={inputType}
+                onChange={() => setType(inputType)}
+                defaultChecked={inputType === currentType}
               />
-              <label htmlFor={`select-type-${itemType}-${index}`}>{itemType}</label>
+              <label htmlFor={`select-type-${component}-${item}-${index}`}>{inputType}</label>
             </React.Fragment>
           ))}
         </RadioContainer>

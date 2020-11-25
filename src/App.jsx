@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
-import * as defaultTheme from "./themes/default2";
+import * as defaultTheme from "./themes/default";
 import * as wording from "./conf/wording";
 
 import AppContext from "./context/AppContext";

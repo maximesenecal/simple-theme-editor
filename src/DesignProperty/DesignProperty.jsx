@@ -33,8 +33,22 @@ const PreviewPanel = styled.button`
 function DesignProperty({ component, item, value, label, type }) {
   const [editable, setEditable] = useState(false);
   const themeContext = useContext(ThemeContext);
+  const regex = /{.*?}/g; // Regex to match references between {}
 
-  const header = `${label}(${themeContext[component][item][1]}) - ${themeContext[component][item][0]}`;
+  const getRef = (ref) => {
+    const categoryRef = ref.substring(
+      ref.lastIndexOf("{") + 1,
+      ref.lastIndexOf(".")
+    );
+    const itemRef = ref.substring(
+      ref.lastIndexOf(".") + 1,
+      ref.lastIndexOf("}")
+    );
+    return themeContext[categoryRef][itemRef][0];
+  }
+  const replacedValue = value.toString().replace(regex, getRef);
+
+  const header = `${label}(${themeContext[component][item][1]}) - ${replacedValue}`;
 
   return (
     <Container>

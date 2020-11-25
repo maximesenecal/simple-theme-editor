@@ -1,30 +1,32 @@
+import types from "../conf/types";
+
 const colors = {
-  primary: "#393b44",
-  primaryBackground: "#f1f3f8",
-  secondary: "#8d93ab",
-  secondaryBackground: "#d6e0f0",
-  highlight1: "#4CB1F8",
-  highlight2: "#ec5858",
+    primary: ["#393b44", types.color],
+    primaryBackground: ["#f1f3f8", types.color],
+    secondary: ["#8d93ab", types.color],
+    secondaryBackground: ["#d6e0f0", types.color],
+    highlight1: ["#4CB1F8", types.color],
+    highlight2: ["#ec5858", types.color],
 };
 
 const sizes = {
-  text: "14px",
-  h1: "1.4em",
-  h2: "1.2em",
-  borderWidth: "1px",
+    text: [12, types.px],
+    h1: [1.4, types.em],
+    h2: [1.2, types.em],
+    borderWidth: [1, types.px],
 };
 
-const textfield = {
-  textSize: "1em",
-  fontColor: "#393b44",
-  border: `2px solid ${colors.primary}`,
-  background: "white",
-}
-
 const buttons = {
-  fontSize: '0.8em',
-  color: "#FFFFFF",
-  background: colors.primary,
+    fontSize: [0.8, types.em],
+    color: ["#FFFFFF", types.color],
+    background: [colors.primary[0], types.color],
 }
 
-export { colors, sizes, textfield, buttons };
+const textfield = {
+    textSize: [1.2, types.em],
+    fontColor: ["#393b44", types.color],
+    border: [`2px solid black`, types.text],
+    background: ["white", types.color],
+  }
+
+export { colors, buttons, sizes, textfield }

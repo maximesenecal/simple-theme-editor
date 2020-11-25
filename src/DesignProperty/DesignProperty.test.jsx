@@ -5,8 +5,10 @@ import { mount } from 'enzyme';
 import DesignProperty from "./DesignProperty";
 import * as defaultTheme from "../themes/default";
 
-const reference = 'colors.primary';
+const component = 'colors';
+const item = 'primary';
 const value = '#ffffff';
+const type = 'color';
 const label = 'Primary font color';
 
 describe('<DesignProperty />', () => {
@@ -15,7 +17,7 @@ describe('<DesignProperty />', () => {
   beforeEach(() => {
     wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
-        <DesignProperty reference={reference} value={value} label={label} />,);
+        <DesignProperty component={component} item={item} value={value} type={type} label={label} />,);
       </ThemeProvider>
     );
   });
@@ -41,16 +43,16 @@ describe('<DesignProperty />', () => {
 });
 
 test("should replace reference in header when detect one", () => {
-  const valueWithRef = '{sizes.borderWidth} solid {colors.primary}';
+  const valueWithRef = '{sizes.borderWidth}px solid {colors.primary}';
 
   const wrapper = mount(
     <ThemeProvider theme={defaultTheme}>
-      <DesignProperty reference={reference} value={valueWithRef} label={label} />,);
+        <DesignProperty component={component} item={item} value={valueWithRef} type={type} label={label} />,);
     </ThemeProvider>
   );
 
   const headerPanel = wrapper.find('p#value');
-  expect(headerPanel.text()).toBe('Primary font color - 1px solid #393b44');
+  expect(headerPanel.text()).toBe('Primary font color(color) - 1px solid #393b44');
 });
 
 

@@ -8,12 +8,13 @@ import Heading from "../Typography/Heading";
 
 const Container = styled.div`
   margin: 0.5rem 0;
+  transition: ease .5s;
 `;
 
 const HeaderButton = styled.button`
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
   position: relative;
   text-align: left;
   width: 100%;

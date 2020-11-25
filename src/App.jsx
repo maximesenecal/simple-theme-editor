@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
-import * as defaultTheme from "./themes/default";
+import * as defaultTheme from "./themes/default2";
 import * as wording from "./conf/wording";
 
 import AppContext from "./context/AppContext";
@@ -12,13 +12,13 @@ import Button from "./Button/Button";
 
 const Container = styled.div`
     width: 100%;
-    background-color: ${({ theme }) => theme.colors.primaryBackground};
+    background-color: ${({ theme }) => theme.colors.primaryBackground[0]};
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: ${({ theme }) => theme.colors.primary};;
+    color: ${({ theme }) => theme.colors.primary[0]};;
 `;
 
 const AccordionGroup = styled.div`
@@ -57,16 +57,12 @@ function App() {
     }
   }, [])
 
-  function updateTheme(property, value) {
-    const reference = property.split('.');
-    const category = reference[0];
-    const component = reference[1];
-
+  function updateTheme(component, item, value, type) {
     const newTheme = {
       ...theme,
-      [category]: {
-        ...theme[category],
-        [component]: value,
+      [component]: {
+        ...theme[component],
+        [item]: [value, type],
       },
     }
     setTheme(newTheme);
@@ -84,9 +80,11 @@ function App() {
               <Accordion key={component} index={index} title={wording.sections[component]}>
                 {Object.entries(theme[component]).map(([item, value]) => (
                   <DesignProperty
-                    key={`${component}.${item}`}
-                    reference={`${component}.${item}`}
-                    value={value}
+                    key={`${component}-${item}`}
+                    component={component}
+                    item={item}
+                    value={value[0]}
+                    type={value[1]}
                     label={wording[component][item]}
                   />
                 ))}

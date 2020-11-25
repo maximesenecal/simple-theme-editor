@@ -6,12 +6,10 @@ import AppContext from "../context/AppContext";
 import Button from "../Button/Button";
 import TextInput from "../TextInput/TextInput";
 import Text from "../Typography/Text";
-import { validateReferences } from "../helpers/references";
-
-const types = ['text', 'em', 'rem', 'px', 'color'];
+import types from "../conf/types";
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
   padding: 0.5rem;
   margin-top: 5px;
 `;
@@ -22,34 +20,55 @@ const HeaderEdit = styled.div`
   align-items: center;
 `;
 
-function EditPanel({ header, reference, currentValue, onClose }) {
-  const [type, setType] = useState('text');
+const RadioContainer = styled.div`
+  display: flex;
+`;
+
+function EditPanel({ header, currentValue, currentType, component, item, onClose }) {
+  const [type, setType] = useState(currentType);
   const [value, setValue] = useState(currentValue);
   const [error, setError] = useState(null);
 
   const context = useContext(AppContext);
   const themeContext = useContext(ThemeContext);
 
+  const getRef = (ref) => {
+    const categoryRef = ref.substring(
+      ref.lastIndexOf("{") + 1,
+      ref.lastIndexOf(".")
+    );
+    const itemRef = ref.substring(
+      ref.lastIndexOf(".") + 1,
+      ref.lastIndexOf("}")
+    );
+    return themeContext[categoryRef][itemRef];
+  }
+
+  const validateRefs = (str) => {
+    const regex = /{.*?}/g; // Regex to match references between {}
+    const refs = str.match(regex);
+    let errorMessage = null;
+
+    if (refs && refs.length >= 1) {
+      refs.forEach(ref => {
+        if (!getRef(ref)) {
+          errorMessage = `Reference ${ref} doesn't exists.`;
+        }
+      })
+    }
+    return errorMessage;
+  }
+
   const handleChange = (e) => {
     setValue(e.target.value);
-    const errorMessage = validateReferences(e.target.value, themeContext);
+    const errorMessage = validateRefs(e.target.value);
     setError(errorMessage);
   };
 
   function handleClick() {
     const { updateTheme } = context;
 
-    let newValue = value;
-    switch (type) {
-      case 'em':
-      case 'rem':
-      case 'px':
-        newValue += type; // Append type when necessary
-        break;
-      default:
-        break;
-    }
-    updateTheme(reference, newValue);
+    updateTheme(component, item, value, type);
   }
 
   return (
@@ -59,33 +78,33 @@ function EditPanel({ header, reference, currentValue, onClose }) {
         <Button id="close-button" onClick={() => onClose()}>Close</Button>
       </HeaderEdit>
       <fieldset>
-        <Text as="label" htmlFor={`${reference}-input`}>Value</Text>
+        <Text as="label" htmlFor={`${item}-input`}>Value</Text>
         <TextInput
           type={type === "color" ? "color" : "text"}
-          id={`${reference}-input`}
-          name={`${reference}-input`}
+          id={`${item}-input`}
+          name={`${item}-input`}
           value={value}
           onChange={handleChange}
           error={error}
           aria-invalid={!!error}
           aria-describedby={error ? "error-message" : undefined}
         />
-      </fieldset>
-      <fieldset>
         <Text>Type</Text>
-        {types.map((item, index) => (
-          <div key={item}>
-            <input
-              type="radio"
-              id={`${reference}-select-${index}`}
-              name={`${reference}-select-type`}
-              value={item}
-              onChange={() => setType(item)}
-              defaultChecked={index === 0}
-            />
-            <label htmlFor={`${reference}-select-${index}`}>{item}</label>
-          </div>
-        ))}
+        <RadioContainer>
+          {Object.keys(types).map((itemType, index) => (
+            <React.Fragment key={itemType}>
+              <input
+                type="radio"
+                id={`select-type-${itemType}-${index}`}
+                name="select-type"
+                value={itemType}
+                onChange={() => setType(itemType)}
+                defaultChecked={itemType === currentType}
+              />
+              <label htmlFor={`select-type-${itemType}-${index}`}>{itemType}</label>
+            </React.Fragment>
+          ))}
+        </RadioContainer>
       </fieldset>
       <Button type="submit" disabled={!!error} id="update-button" onClick={() => handleClick()}>Update</Button>
     </Container>
@@ -94,8 +113,10 @@ function EditPanel({ header, reference, currentValue, onClose }) {
 
 EditPanel.propTypes = {
   header: PropTypes.string.isRequired,
-  reference: PropTypes.string.isRequired,
-  currentValue: PropTypes.string.isRequired,
+  currentType: PropTypes.oneOf(['text', 'color', 'px', 'em', 'rem']).isRequired,
+  currentValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  component: PropTypes.string.isRequired,
+  item: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 
 import EditPanel from "../EditPanel/EditPanel";
 import Text from "../Typography/Text";
-import { regex, getRefInTheme } from "../helpers/references";
 
 const Container = styled.div`
   margin: 0.5rem 0;
@@ -14,7 +13,7 @@ const PreviewPanel = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.primaryBackground};
+  background-color: ${({ theme }) => theme.colors.primaryBackground[0]};
   margin: 0;
   position: relative;
   text-align: left;
@@ -23,18 +22,19 @@ const PreviewPanel = styled.button`
   border: none;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.secondaryBackground};
-    transition: 0.2s ease-in;
+    background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
+    transition: ease .5s;
   }
   &:focus {
-    background-color: ${({ theme }) => theme.colors.secondaryBackground};
+    background-color: ${({ theme }) => theme.colors.secondaryBackground[0]};
   }
 `;
 
-function DesignProperty({ reference, value, label }) {
+function DesignProperty({ component, item, value, label, type }) {
   const [editable, setEditable] = useState(false);
   const themeContext = useContext(ThemeContext);
-  const header = `${label} - ${value.replace(regex, (ref) => getRefInTheme(ref, themeContext))}`;
+
+  const header = `${label}(${themeContext[component][item][1]}) - ${themeContext[component][item][0]}`;
 
   return (
     <Container>
@@ -42,7 +42,9 @@ function DesignProperty({ reference, value, label }) {
         <EditPanel
           header={header}
           currentValue={value}
-          reference={reference}
+          currentType={type}
+          component={component}
+          item={item}
           onClose={() => setEditable(false)}
         />
       ) : (
@@ -50,7 +52,7 @@ function DesignProperty({ reference, value, label }) {
             <Text id="value">
               {header}
             </Text>
-            <i>{reference}</i>
+            <i>{`${component}.${item}`}</i>
           </PreviewPanel>
         )}
     </Container>
@@ -58,8 +60,10 @@ function DesignProperty({ reference, value, label }) {
 }
 
 DesignProperty.propTypes = {
-  reference: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  component: PropTypes.string.isRequired,
+  item: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  type: PropTypes.oneOf(['text', 'color', 'px', 'em', 'rem']).isRequired,
   label: PropTypes.string.isRequired,
 };
 

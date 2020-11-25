@@ -7,13 +7,13 @@ import { ReactComponent as Alert } from "./alert-circle.svg";
 
 const StyledInput = styled.input`
     box-sizing: border-box;
-    font-size: ${({ theme }) => theme.textfield.textSize};;
+    font-size: ${({ theme }) => theme.textfield.textSize[0]+theme.textfield.textSize[1]};
     height: 30px;
     padding: 0 10px;
     margin-top: 10px;
-    color: ${({ theme }) => theme.textfield.fontColor};
-    background-color: ${({ theme }) => theme.textfield.background};
-    border: ${({ theme, error }) => error ? "2px solid red" : theme.textfield.border};
+    color: ${({ theme }) => theme.textfield.fontColor[0]};
+    background-color: ${({ theme }) => theme.textfield.background[0]};
+    border: ${({ theme, error }) => error ? "2px solid red" : theme.textfield.border[0]};
 
     &[type="color"] {
         padding: 0;

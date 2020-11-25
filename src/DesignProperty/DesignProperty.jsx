@@ -66,7 +66,9 @@ function DesignProperty({ component, item, value, label, type }) {
             <Text id="value">
               {header}
             </Text>
-            <i>{`${component}.${item}`}</i>
+            <Text>
+              <i>{`${component}.${item}`}</i>
+            </Text>
           </PreviewPanel>
         )}
     </Container>
